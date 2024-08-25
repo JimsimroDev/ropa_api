@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tienda de Ropa</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <!-- Barra de navegación fija -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="/images/infografia.gif" alt="Logo" width="30" height="30" />
+          Tienda de Ropa
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <img
+                  src="/images/grifo.gif"
+                  alt="Inicio"
+                  width="24"
+                  height="24"
+                />
+                Inicio
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <img
+                  src="/images/lista.gif"
+                  alt="Productos"
+                  width="24"
+                  height="24"
+                />
+                Productos
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <img
+                  src="/images/contacto-de-personas.gif"
+                  alt="Contacto"
+                  width="24"
+                  height="24"
+                />
+                Contacto
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <img
+                  src="/images/seguridad-en-linea.gif"
+                  alt="Registro"
+                  width="24"
+                  height="24"
+                />
+                Registro
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/registro.html">
+                <img
+                  src="/images/las-compras-en-linea.gif"
+                  alt="Carrito"
+                  width="24"
+                  height="24"
+                />
+                Carrito
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Carrusel -->
+    <div
+      id="carouselExample"
+      class="carousel slide mt-5"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="/producto1.jpg" class="d-block w-100 carussel1" alt="..." />
+        </div>
+        <div class="carousel-item">
+          <img src="/producto1.jpg" class="d-block w-100" alt="..." />
+        </div>
+        <div class="carousel-item">
+          <img src="/producto1.jpg" class="d-block w-100" alt="..." />
+        </div>
+      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExample"
+        data-bs-slide="prev"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExample"
+        data-bs-slide="next"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+    <!-- Sección de productos -->
+    <div class="container mt-5">
+      <div class="row" id="productos">
+        <!-- Productos se cargarán aquí mediante la API -->
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Cargar productos desde el backend
+        fetch("http://localhost:3000/api/productos")
+          .then((response) => response.json())
+          .then((data) => {
+            const productosContainer = document.getElementById("productos");
+            productosContainer.innerHTML = ""; // Limpiar contenedor
+            data.forEach((producto) => {
+              const productoHTML = `
+                          <div class="col-md-4 mb-4">
+                              <div class="card">
+                                  <img src="${
+                                    producto.image
+                                  }" class="card-img-top" alt="${
+                producto.title
+              }">
+                                  <div class="card-body">
+                                      <h5 class="card-title">${
+                                        producto.title
+                                      }</h5>
+                                      <p class="card-text">${
+                                        producto.description
+                                      }</p>
+                                      <p class="card-text"><strong>$${producto.price.toFixed(
+                                        2
+                                      )}</strong></p>
+                                      <a href="#" class="btn btn-primary">Agregar al carrito</a>
+                                  </div>
+                              </div>
+                          </div>
+                      `;
+              productosContainer.innerHTML += productoHTML;
+            });
+          })
+          .catch((error) =>
+            console.error("Error al cargar los productos:", error)
+          );
+      });
+    </script>
+
+    <!-- Modal de Registro -->
+    <div
+      class="modal fade"
+      id="registroModal"
+      tabindex="-1"
+      aria-labelledby="registroModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="registroModal">Registro de Usuario</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="registroForm">
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" required />
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" id="email" required />
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-primary">Registrar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="/js/scripts.js"></script>
+  </body>
+</html>
